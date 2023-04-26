@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <title>Document</title>
+    <style>
+      ul {
+        display: grid;
+        grid: auto-flow / 1fr 1fr 1fr 1fr 1fr;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 100%;
+        list-style: none;
+      }
+      img {
+        height: 250px;
+        width: 180px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <ul></ul>
+    </div>
+    <button>点击</button>
+    <script>
+      function init(url) {
+        const p = new Promise(function (resolve, reject) {
+          let xhr = new XMLHttpRequest()
+          xhr.open("GET", url)
+          xhr.send()
+          xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+              resolve(this.responseText)
+            }
+          }
+        })
+        return p
+        //console.log(p);
+      }
+      const btn = document.querySelector("button")
+      btn.onclick = function () {
+        init("http://localhost:3000/data").then((res) => {
+          const ul = document.querySelector("ul")
+          //   console.log(res);
+          console.log(JSON.parse(res))
+
+          JSON.parse(res).forEach((item) => {
+            console.log(item)
+
+            Mimgurl = item.info.imgurl
+            mtitle = item.title
+            mpingfen = item.info.pingfen
+            console.log(Mimgurl)
+            ul.innerHTML += `<li>
+                                <img src="${Mimgurl}" alt="">
+                                <p>${mtitle}&nbsp <span>${
+              mpingfen + "分"
+            }</span></p>
+                            </li>`
+          })
+        })
+      }
+    </script>
+  </body>
+</html>
