@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="never" />
+    <title>Document</title>
+    <style>
+      ul {
+        margin: 50px auto;
+        display: grid;
+        grid: auto-flow / 1fr 1fr 1fr 1fr 1fr;
+        width: 80%;
+        height: 80%;
+        list-style: none;
+      }
+      img {
+        height: 250px;
+        width: 180px;
+      }
+      a {
+        text-decoration: none;
+      }
+      p {
+        font-size: 18px;
+        color: rgb(80, 161, 193);
+        text-align: center;
+
+        width: 180px;
+      }
+      span {
+        color: rgb(236, 194, 88);
+      }
+      .title {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .pingfen {
+        text-align: center;
+        font-size: 17px;
+        margin-bottom: 10px;
+      }
+      .image-caption {
+        display: none;
+      }
+      .image-container {
+        position: relative;
+      }
+      .image-container:hover .image-caption {
+        display: block;
+        position: absolute;
+        width: 350px;
+        height: 190px;
+        top: 0px;
+        left: 200px;
+        /* width: 90%; */
+        background-color: rgba(255, 255, 255, 0.9);
+        color: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        z-index: 10;
+        border-radius: 20px;
+      }
+      #image-caption5 {
+        left: -370px;
+      }
+      #image-caption10 {
+        left: -370px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <ul></ul>
+    </div>
+
+    <script>
+      function init(url) {
+        const p = new Promise(function (resolve, reject) {
+          let xhr = new XMLHttpRequest()
+          xhr.open("GET", url)
+          xhr.send()
+          xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+              resolve(this.responseText)
+            }
+          }
+        })
+        return p
+        //console.log(p);
+      }
+
+      window.onload = function () {
+        init("http://localhost:3000/data").then((res) => {
+          const ul = document.querySelector("ul")
+          console.log(JSON.parse(res))
+          var index = 0
+          JSON.parse(res).forEach((item) => {
+            index++
+            item.index = index
+            const idName = `image-caption${item.index}`
+            const Mhref = item.info.url
+            const Mimgurl = item.info.imgurl
+            const Mactor = item.info.yanyuan
+            const Mtitle = item.title
+            const Mpingfen = item.info.pingfen
+            console.log(Mimgurl)
+            ul.innerHTML += `<li>
+                                <a href = '${Mhref}'>
+                               <div class="image-container">
+                                <img src="${Mimgurl}" alt="">
+                                <div class="image-caption" id="${idName}">
+                                 <div class="title"> ${Mtitle}</div>
+                                 <div class="pingfen"> ${Mpingfen}</div>
+                                  ${Mactor}
+                                  </div>
+                                </div>
+                                <p>${Mtitle}&nbsp <span>${Mpingfen}</span></p>
+                            </li>`
+          })
+        })
+      }
+    </script>
+  </body>
+</html>
